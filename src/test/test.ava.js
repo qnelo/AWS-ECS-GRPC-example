@@ -20,3 +20,8 @@ test('div test', t => {
     const response = calculator('div', 9, 2);
     t.is(response, 4.5);
 });
+
+test('other test', t => {
+    const response = calculator(':)', 9, 2);
+    t.is(response, null);
+});
