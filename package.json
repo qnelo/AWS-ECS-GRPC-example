@@ -1,0 +1,29 @@
+{
+  "name": "aws-ecs-grpc-example",
+  "version": "1.0.0",
+  "description": "example project",
+  "main": "./src/index.js",
+  "scripts": {
+    "test:watch": "ava --watch ./src/test/*.ava.js",
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qnelo/AWS-ECS-GRPC-example.git"
+  },
+  "keywords": [
+    "aws",
+    "ecs",
+    "grpc",
+    "node"
+  ],
+  "author": "camilo henriquez mena",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/qnelo/AWS-ECS-GRPC-example/issues"
+  },
+  "homepage": "https://github.com/qnelo/AWS-ECS-GRPC-example#readme",
+  "devDependencies": {
+    "ava": "^0.25.0"
+  }
+}
