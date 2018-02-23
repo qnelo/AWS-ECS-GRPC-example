@@ -4,8 +4,8 @@
   "description": "example project",
   "main": "./src/index.js",
   "scripts": {
-    "test:watch": "ava --verbose --watch ./src/test/*.ava.js",
-    "test": "nyc ava ./src/test/*.ava.js"
+    "test:watch": "ava --verbose --watch ./**/*.ava.js",
+    "test": "nyc ava ./**/*.ava.js"
   },
   "repository": {
     "type": "git",

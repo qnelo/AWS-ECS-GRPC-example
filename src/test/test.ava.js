@@ -1,5 +1,5 @@
 import test from 'ava';
-import calculator from '../index';
+import calculator from '../';
 
 test('sum test', t => {
     const response = calculator('sum', 9, 2);
