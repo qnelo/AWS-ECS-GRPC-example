@@ -46,6 +46,25 @@ COPY package*.json ./
 RUN npm install
 
 # Se copian los archivos fuentes del proyecto en el contenedor
-COPY ./src/* ./
+ADD . /src/app
 ```
 
+Más información en ls [pagina de referencia de docker](https://docs.docker.com/engine/reference/builder/).
+
+## 3.- Utilizar `docker-compose` para manejar el contenedor
+
+`docker-compose` es una herramienta que permite manejar el ciclo de vida de una aplicacion dockerizada, para mayor información visitar la [referencia de `docker-compose` en línea](https://docs.docker.com/compose/overview/).
+
+```yml
+version: '3'
+services:
+
+  test:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run test
+```
+
+Se ocupa la version 3 de `docker-compose` y se define un servicio

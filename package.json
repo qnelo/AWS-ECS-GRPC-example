@@ -5,7 +5,8 @@
   "main": "./src/index.js",
   "scripts": {
     "test:watch": "ava --verbose --watch ./**/*.ava.js",
-    "test": "nyc ava ./**/*.ava.js"
+    "test": "nyc ava ./**/*.ava.js",
+    "build:test": "docker-compose up --build test"
   },
   "repository": {
     "type": "git",

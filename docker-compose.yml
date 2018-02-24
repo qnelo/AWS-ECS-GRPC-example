@@ -7,10 +7,3 @@ services:
       context: .
       dockerfile: Dockerfile
     command: npm run test
-
-  test_watch:
-    tty: true
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: npm run test:watch
