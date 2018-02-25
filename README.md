@@ -59,7 +59,7 @@ Más información en ls [pagina de referencia de docker](https://docs.docker.com
 version: '3'
 services:
 
-  test:
+  app:
     tty: true
     build:
       context: .
@@ -67,4 +67,4 @@ services:
     command: npm run test
 ```
 
-Se ocupa la version 3 de `docker-compose` y se define un servicio
+Se ocupa la version 3 de `docker-compose` y se define un servicio `app` que se levantará un contenedor segun la definición del archivo `Dockerfile` y luego ejecutará el comando `npm run test`.

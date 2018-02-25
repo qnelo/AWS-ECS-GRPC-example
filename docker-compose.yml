@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  build:
+  app:
     tty: true
     build:
       context: .
@@ -13,4 +13,6 @@ services:
     build:
       context: .
       dockerfile: DockerfileTest
+    volumes:
+      - .:/src/app
     command: npm run test:watch
