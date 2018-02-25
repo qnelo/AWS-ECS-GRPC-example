@@ -1,9 +1,16 @@
 version: '3'
 services:
 
-  test:
+  build:
     tty: true
     build:
       context: .
       dockerfile: Dockerfile
     command: npm run test
+
+  test_watch:
+    tty: true
+    build:
+      context: .
+      dockerfile: DockerfileTest
+    command: npm run test:watch
