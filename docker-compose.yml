@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     command: npm run test
 
-  test_watch:
+  test_docker:
     tty: true
     build:
       context: .

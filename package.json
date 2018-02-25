@@ -6,7 +6,8 @@
   "scripts": {
     "test:watch": "ava --verbose --watch ./**/*.ava.js",
     "test": "nyc ava ./**/*.ava.js",
-    "build": "docker-compose up --build app"
+    "build": "docker-compose up --build app",
+    "test:docker": "docker-compose up --build test_docker"
   },
   "repository": {
     "type": "git",

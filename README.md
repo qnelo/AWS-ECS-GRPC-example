@@ -49,16 +49,17 @@ RUN npm install
 ADD . /src/app
 ```
 
-Más información en ls [pagina de referencia de docker](https://docs.docker.com/engine/reference/builder/).
+Más información en la [pagina de referencia de docker](https://docs.docker.com/engine/reference/builder/).
 
 ## 3.- Utilizar `docker-compose` para manejar el contenedor
 
 `docker-compose` es una herramienta que permite manejar el ciclo de vida de una aplicacion dockerizada, para mayor información visitar la [referencia de `docker-compose` en línea](https://docs.docker.com/compose/overview/).
 
 ```yml
+# Se define un solo servicio en este caso, pero pueden definirse mas servicios y ejecutarse todos a la vez, por separado y definir dependencias entre servicios.
+
 version: '3'
 services:
-
   app:
     tty: true
     build:
@@ -68,3 +69,7 @@ services:
 ```
 
 Se ocupa la version 3 de `docker-compose` y se define un servicio `app` que se levantará un contenedor segun la definición del archivo `Dockerfile` y luego ejecutará el comando `npm run test`.
+
+## 4.- Utilizar GRPC en el proyecto.
+
+[GRPC](https://grpc.io/) es un framework [rpc](https://es.wikipedia.org/wiki/Llamada_a_procedimiento_remoto) que permite comunicar servicios escritos en diferentes lenguajes de forma simple, bi-direccional, segura y escalable. Esta implementado sobre [http/2](https://http2.github.io/) y ocupa [protocol buffers](https://developers.google.com/protocol-buffers/docs/overview) el cual es un protocolo que serializa datos estructurados con una gran performance.
