@@ -1,4 +1,4 @@
-const calculator = (operator, num1, num2) => {
+const calculator = ({operator, num1, num2}) => {
     switch (operator) {
     case 'sum':
         return num1 + num2;

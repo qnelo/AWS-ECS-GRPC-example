@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package grpccalculator;
+
+service calculator {
+    rpc calculator (Params) returns (Result) {}
+}
+
+message Params {
+    required string operator = 1;
+    required int32 num1 = 2;
+    required int32 num2 = 3;
+}
+
+message Result {
+    optional int32 result = 1; 
+}
