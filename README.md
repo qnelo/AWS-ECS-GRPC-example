@@ -8,7 +8,7 @@ Para ello se detallarán una lista de pasos a seguir.
 Se crea una calculadora simple a la cual se le pasa el operador y dos operandos como parametros.
 
 ```js
-const calculator = (operator, num1, num2) => {
+const calculator = ({ operator, num1, num2 }) => {
     switch (operator) {
     case 'sum':
         return num1 + num2;
@@ -72,4 +72,79 @@ Se ocupa la version 3 de `docker-compose` y se define un servicio `app` que se l
 
 ## 4.- Utilizar GRPC en el proyecto.
 
-[GRPC](https://grpc.io/) es un framework [rpc](https://es.wikipedia.org/wiki/Llamada_a_procedimiento_remoto) que permite comunicar servicios escritos en diferentes lenguajes de forma simple, bi-direccional, segura y escalable. Esta implementado sobre [http/2](https://http2.github.io/) y ocupa [protocol buffers](https://developers.google.com/protocol-buffers/docs/overview) el cual es un protocolo que serializa datos estructurados con una gran performance.
+[GRPC](https://grpc.io/) es un framework [rpc](https://es.wikipedia.org/wiki/Llamada_a_procedimiento_remoto) que permite comunicar servicios escritos en diferentes lenguajes de forma simple, bi-direccional, segura y escalable. Esta implementado sobre [http/2](https://http2.github.io/) y ocupa [protocol buffers](https://developers.google.com/protocol-buffers/docs/overview), el cual es un protocolo que serializa datos estructurados con una gran performance.
+
+Para empezar a ocupar GRPC, se crea el archivo de definición de protocol buffer.
+
+```protobuf
+syntax = "proto3";
+
+package grpccalculator;
+
+service calculator {
+    rpc calculator (Params) returns (Result) {}
+}
+
+message Params {
+    required string operator = 1;
+    required int32 num1 = 2;
+    required int32 num2 = 3;
+}
+
+message Result {
+    optional int32 result = 1; 
+}
+```
+
+Luego se configura el servidor GRPC
+
+```js
+const grpc = require('grpc');
+const nodeCalculator = require('./index'); // Importar el archivo de calculadora
+const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator; // Cargar el archivo con definicion protocol buffer.
+
+// Funcion que invoca la calculadora
+const calculator = async (call, callback) => {
+    const result = await nodeCalculator(call.request);
+    return callback(null, result);
+};
+
+// Funcion que define el servidor GRPC agregando el servicio de calculadora
+const grpcServer = () => {
+    const server = new grpc.Server();
+    server.addService(grpcProto.calculator.service, {
+        calculator
+    });
+    return server;
+};
+
+// Configurar socket e iniciar el servidor.
+const routeServer = grpcServer();
+routeServer.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
+routeServer.start();
+```
+
+Para probar el servidor, se puede crear un cliente que consuma el servidor.
+
+```js
+const grpc = require('grpc');
+// Se carga la definición de protocol buffer
+const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator;
+
+// Se configura el cliente
+const grpcClient = new grpcProto.calculator('localhost:50051', grpc.credentials.createInsecure());
+
+// Se invoca el servicio
+grpcClient.calculator(
+    {
+        operator: 'res',
+        num1: 9,
+        num2: 2
+    }, (err, response) => {
+        if (err) {
+            console.info('ERROR EN LLAMADO -> ', err);
+        }
+        console.info('Response:', response.result);
+
+    });
+```
