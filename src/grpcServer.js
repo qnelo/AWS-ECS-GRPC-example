@@ -2,19 +2,29 @@ const grpc = require('grpc');
 const nodeCalculator = require('./index');
 const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator;
 
-const calculator = async (call, callback) => {
-    const result = await nodeCalculator(call.request);
+/**
+ * Calculator wrapper
+ * @param {Object} input Parameters
+ * @param {callback} callback callback
+ * @returns {callback} result
+ */
+const calculator = async (input, callback) => {
+    const result = await nodeCalculator(input.request);
     return callback(null, result);
 };
 
+/**
+ * GRPC Server
+ * @returns {GRPC} Server
+*/
 const grpcServer = () => {
-    const server = new grpc.Server();
-    server.addService(grpcProto.calculator.service, {
+    const newServer = new grpc.Server();
+    newServer.addService(grpcProto.calculator.service, {
         calculator
     });
-    return server;
+    return newServer;
 };
 
-const routeServer = grpcServer();
-routeServer.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
-routeServer.start();
+const server = grpcServer();
+server.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
+server.start();

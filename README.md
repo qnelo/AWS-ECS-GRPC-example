@@ -8,6 +8,11 @@ Para ello se detallarán una lista de pasos a seguir.
 Se crea una calculadora simple a la cual se le pasa el operador y dos operandos como parametros.
 
 ```js
+/**
+ * Calculator function
+ * @param {Object} params Object with params
+ * @returns {Integer} result
+ */
 const calculator = ({ operator, num1, num2 }) => {
     switch (operator) {
     case 'sum':
@@ -100,28 +105,40 @@ Luego se configura el servidor GRPC
 
 ```js
 const grpc = require('grpc');
-const nodeCalculator = require('./index'); // Importar el archivo de calculadora
-const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator; // Cargar el archivo con definicion protocol buffer.
+// Importar el archivo de calculadora
+const nodeCalculator = require('./index');
+// Cargar el archivo con definicion protocol buffer.
+const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator;
 
 // Funcion que invoca la calculadora
-const calculator = async (call, callback) => {
-    const result = await nodeCalculator(call.request);
+/**
+ * Calculator wrapper
+ * @param {Object} input Parameters
+ * @param {callback} callback callback
+ * @returns {callback} result
+ */
+const calculator = async (input, callback) => {
+    const result = await nodeCalculator(input.request);
     return callback(null, result);
 };
 
 // Funcion que define el servidor GRPC agregando el servicio de calculadora
+/**
+ * GRPC Server
+ * @returns {GRPC} Server
+*/
 const grpcServer = () => {
-    const server = new grpc.Server();
-    server.addService(grpcProto.calculator.service, {
+    const newServer = new grpc.Server();
+    newServer.addService(grpcProto.calculator.service, {
         calculator
     });
-    return server;
+    return newServer;
 };
 
 // Configurar socket e iniciar el servidor.
-const routeServer = grpcServer();
-routeServer.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
-routeServer.start();
+const server = grpcServer();
+server.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
+server.start();
 ```
 
 Para probar el servidor, se puede crear un cliente que consuma el servidor.

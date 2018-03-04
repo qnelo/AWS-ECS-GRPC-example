@@ -1,3 +1,8 @@
+/**
+ * Calculator function
+ * @param {Object} params Object with params
+ * @returns {Integer} result
+ */
 const calculator = ({ operator, num1, num2 }) => {
     switch (operator) {
     case 'sum':
