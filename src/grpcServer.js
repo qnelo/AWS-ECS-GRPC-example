@@ -26,5 +26,5 @@ const grpcServer = () => {
 };
 
 const server = grpcServer();
-server.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
+server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
