@@ -5,7 +5,7 @@ const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator;
 /**
  * Calculator wrapper
  * @param {Object} input Parameters
- * @param {callback} callback callback
+ * @param {callback} callback The callback to call to respond to the request
  * @returns {callback} result
  */
 const calculator = async (input, callback) => {
