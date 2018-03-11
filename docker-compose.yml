@@ -22,8 +22,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # volumes:
-    #   - .:/src/app
     command: node ./src/grpcServer.js
     ports:
       - "50051:50051"
