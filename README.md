@@ -41,6 +41,9 @@ El primer paso es crear el archivo `Dockerfile` en la raiz del proyecto con el s
 # Imagen base que se ocupará, esta version viene con NPM instalado
 FROM node:carbon-alpine
 
+# Dependencias necesarias para instalación de GRPC
+RUN apk add --no-cache make gcc g++ python
+
 # Se crea y define la carpeta de la aplicación dentro del contenedor
 WORKDIR /src/app
 
@@ -61,19 +64,38 @@ Más información en la [pagina de referencia de docker](https://docs.docker.com
 `docker-compose` es una herramienta que permite manejar el ciclo de vida de una aplicacion dockerizada, para mayor información visitar la [referencia de `docker-compose` en línea](https://docs.docker.com/compose/overview/).
 
 ```yml
-# Se define un solo servicio en este caso, pero pueden definirse mas servicios y ejecutarse todos a la vez, por separado y definir dependencias entre servicios.
+# Se definen 3 servicios en este caso, pero pueden definirse mas servicios y ejecutarse todos a la vez, por separado y definir dependencias entre servicios.
 
 version: '3'
 services:
-  app:
+
+  test:
+    tty: true
+    build:
+      context: .
+      dockerfile: DockerfileTest
+    command: npm run t
+
+  test_watch:
+    tty: true
+    build:
+      context: .
+      dockerfile: DockerfileTest
+    volumes:
+      - .:/src/app
+    command: npm run t:w
+
+  start:
     tty: true
     build:
       context: .
       dockerfile: Dockerfile
-    command: npm run test
+    command: node ./src/grpcServer.js
+    ports:
+      - "50051:50051"
 ```
 
-Se ocupa la version 3 de `docker-compose` y se define un servicio `app` que se levantará un contenedor segun la definición del archivo `Dockerfile` y luego ejecutará el comando `npm run test`.
+Se ocupa la version 3 de `docker-compose` y se definen 3 servicios (`start`, `test`, `test_watch`) los cuales levantarán contenedores segun la definición del archivo `Dockerfile` para luego ejecutar los comandos correspondientes.
 
 ## 4.- Utilizar GRPC en el proyecto.
 
@@ -114,7 +136,7 @@ const grpcProto = grpc.load(`${__dirname}/calculator.proto`).grpccalculator;
 /**
  * Calculator wrapper
  * @param {Object} input Parameters
- * @param {callback} callback callback
+ * @param {callback} callback The callback to call to respond to the request
  * @returns {callback} result
  */
 const calculator = async (input, callback) => {
@@ -137,7 +159,7 @@ const grpcServer = () => {
 
 // Configurar socket e iniciar el servidor.
 const server = grpcServer();
-server.bind('localhost:50051', grpc.ServerCredentials.createInsecure());
+server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
 ```
 

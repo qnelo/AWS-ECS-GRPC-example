@@ -4,11 +4,11 @@
   "description": "example project",
   "main": "./src/index.js",
   "scripts": {
-    "test:watch": "ava --verbose --watch ./**/*.ava.js",
-    "test": "nyc ava ./**/*.ava.js",
-    "build": "docker-compose up --build app",
-    "test:docker": "docker-compose up --build test_docker",
-    "start": "docker-compose up --build start"
+    "t:w": "ava --verbose --watch ./**/*.ava.js",
+    "t": "nyc ava ./**/*.ava.js",
+    "start": "docker-compose up --build start",
+    "test": "docker-compose up --build test",
+    "test:watch": "docker-compose up --build test_watch"
   },
   "repository": {
     "type": "git",
